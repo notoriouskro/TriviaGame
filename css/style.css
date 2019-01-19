@@ -1,0 +1,45 @@
+body {
+    background-image: url("../images/ice.png");
+    background-repeat: no-repeat;
+    background-size: 110%;
+    background-color: #cccccc;
+
+}
+
+h1 {
+    text-align: center;
+    color: navy;
+}
+
+.button {
+    background-color: black;
+    border: 1px white solid;
+    color: white;
+    padding: 25px 80px;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 25px;
+  }
+
+  .buttonDiv {
+    text-align: center;
+  }
+
+.questionBox {
+    
+    background-color: rgb(255, 255, 255, 55%);
+    border-radius: 25px;
+    min-height: 350px;
+    width: auto;
+    text-align: center;
+    padding-top: 2%;
+}
+
+
+
+.jumbotron {
+    background-color: rgb(255, 255, 255, 55%);
+}
