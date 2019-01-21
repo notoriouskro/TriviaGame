@@ -108,7 +108,6 @@ var game = {
     $('.time').text('Time Remaining: ' + game.time);
     if (game.time === 0) {
       clearInterval(intervalId);
-      game.unAnswer++;
       game.onTimeout();
     }
   },
