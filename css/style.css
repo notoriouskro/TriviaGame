@@ -43,3 +43,26 @@ h1 {
 .jumbotron {
     background-color: rgb(255, 255, 255, 55%);
 }
+
+
+.question {
+font-size: 35px;
+color: navy;
+margin-bottom: 25px;
+font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.buttonAnswer {
+    margin-right: 20px;
+    font-size: 20px;
+    margin-bottom: 45px;
+}
+
+#time {
+    font-size: 25px;
+}
+
+h2 {
+   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+   color: red; 
+}

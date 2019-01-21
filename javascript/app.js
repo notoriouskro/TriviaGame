@@ -1,19 +1,15 @@
 
-var images = [];
-var correctAnswer = 0;
-var wrongAnswer = 0;
-var unAnswer = 0;
 var intervalId;
+var timeoutId;
 
 
 
 var game = {
-  currQuest: 0,
+  currQuest: -1,
   countCorrect: 0,
   countWrong: 0,
   unAnswer: 0,
-  time: 0,
-
+  time: 30,
   questions: [
     {
       ask: ["How many Stanley Cups does Sidney Crosby have?"],
@@ -33,65 +29,158 @@ var game = {
       answer: 3,
 
     },
+
+    {
+      ask: "Which player won the Hart trophy and the Conn Smythe trophy in the same season, and then repeated the feat a second time?",
+      options: ["Steve Yzerman", "Ray Bourque", "Bobby Orr", "Mark Messier"],
+      answer: 2,
+
+    },
   ],
 
-  init: function() {
-  this.currQuest = 0;
-  countCorrect = 0;
-  countWrong = 0;
-  unAnswer = 0;
-  time = 30;
+  startGame: function () {
+    console.log('startGame')
+    game.init();
+    game.startQuestion();
+  },
+
+  init: function () {
+    console.log('init');
+    this.currQuest = -1;
+    this.countCorrect = 0;
+    this.countWrong = 0;
+    this.unAnswer = 0;
+    this.time = 30;
+
+
   },
 
   startQuestion: function () {
-    intervalId = setInterval(questionClock.counter, 1000);
-  },
-  counter: function () {
-    game.time--;
-  },
-  showQuestion: function () {
-    console.log("Question: " + this.questions[this.currQuest].ask);
-    for (var i = 0; i < this.questions[this.currQuest].options.length; i++) {
-      console.log("Option: " + this.questions[this.currQuest].options[i]);
+    console.log('startQuestion')
+    game.stopQuestion();
+    game.currQuest++;
+    if (game.currQuest < game.questions.length) {
+      game.time = 30;
+      game.showQuestion();
+      timeout = setTimeout(game.doTimeout, 1000 * 30);
+      intervalId = setInterval(game.runClock, 1000)
+    } else {
+      game.stopGame();
     }
-    console.log(this.questions[this.currQuest].options[this.questions[this.currQuest].answer]);
-  },
-
-  startGame: function () {
-    game.init();
-    game.showQuestion();
-
-    console.log(init());
 
   },
 
+  showQuestion: function () {
+
+    console.log('showQuestion')
+    $('.questionBox').html('');
+    $('.buttonDiv').html('');
+
+
+
+    newDiv = $('<div>', { id: 'question', 'class': 'question' });
+    newDiv.text(this.questions[this.currQuest].ask);
+    $('.questionBox').append(newDiv);
+
+    newDiv = $('<div>', { id: 'answer', 'class': 'answer' });
+    $('.questionBox').append(newDiv);
+
+
+
+
+    for (var i = 0; i < this.questions[this.currQuest].options.length; i++) {
+
+      var answerButton = $('<button>');
+      answerButton.addClass('buttonAnswer');
+      answerButton.attr('value', i);
+      answerButton.text(this.questions[this.currQuest].options[i]);
+      $('.questionBox').append(answerButton);
+    }
+    $('.buttonAnswer').on('click', this.answerTime)
+
+    var newDiv = $('<div>', { id: 'time', 'class': 'time' });
+    newDiv.text('Clock: ' + game.time);
+    console.log(game.time);
+    $('.questionBox').append(newDiv);
+  },
+  runClock: function () {
+    game.time--;
+    $('.time').text('Time: ' + game.time);
+    if (game.time === 0) {
+      clearInterval(intervalId);
+      game.unAnswer++;
+      game.onTimeout();
+    }
+  },
+
+  onTimeout: function () {
+    game.unAnswer++;
+    game.stopQuestion();
+    game.youTimeout();
+    console.log(unAnswer);
+    timeoutId = setTimeout(game.startQuestion, 1000 * 3);
+
+  },
   stopQuestion: function () {
+    clearTimeout(timeoutId);
+    clearInterval(intervalId);
+  },
 
+  answerTime: function () {
+    game.stopQuestion();
+    var cAnswer = $(this).val();
+
+    if (Number(cAnswer) === game.questions[game.currQuest].answer) {
+      game.countCorrect++;
+      console.log("you did it! " + game.countCorrect);
+      game.yourRight();
+      ;
+    } else {
+      game.countWrong++;
+      game.yourWrong();
+
+    }
+  },
+  yourRight: function () {
+    $('.questionBox').html('');
+    var div = $('<div>');
+    div.html('<br><img src="images/tommy.jpg"></img></div>');
+    $('.questionBox').append(div);
+    timeoutId = setTimeout(game.startQuestion, 1000 * 3);
+
+  },
+
+  yourWrong: function () {
+    $('.questionBox').html('');
+    var div = $('<div>');
+    div.html('<br><img src="images/wrong.jpeg"></img></div>');
+    $('.questionBox').append(div);
+    timeoutId = setTimeout(game.startQuestion, 1000 * 3);
+  },
+
+  youTimeout: function () {
+    $('.questionBox').html(''); 
+        var div = $('<div>');
+        div.html('<br><img src="images/milton.jpg"></img></div>');
+        $('.questionBox').append(div);
+        timeoutId = setTimeout(game.startQuestion,1000*5);
+
+  },
+
+  stopGame: function () {
+    console.log('stopGame');
+    //clear p
+    $('.questionBox').html('');
+    //push current info
+    $('.questionBox').html('Correct: ' + this.countCorrect + '<br />');
+    console.log("Correct: " + this.countCorrect);
+    $('.questionBox').append('Incorrect: ' + this.countWrong + '<br />');
+    console.log("Incorrect: " + this.countWrong);
+    $('.questionBox').append('Unanswered: ' + this.unAnswer + '<br />');
   }
-
 };
-$(".button").on('click', game.startGame) 
+$(".button").on('click', game.startGame);
 
 
 
 
-// $("#question").replaceWith("<h3>" + question + "</h3>");
-// $("#answerOne").replaceWith('<input type="radio" id="myRadio" name="answerButton"></input> ' + answer[0]);
-// $("#answerTwo").replaceWith('<input type="radio" id="myRadio" name="answerButton"></input> ' + answer[1]);
-// $("#answerThree").replaceWith('<input type="radio" id="myRadio" name="answerButton"></input> ' + answer[2]);
-// $("#answerFour").replaceWith('<input type="radio" id="myRadio" name="answerButton"></input> ' + answer[3]);
-// function radioButton() {
-//   var x = document.getElementById("myRadio");
-//   x.checked = true;
-
-
-
-
-
-
-
-  //onClick Game Starts
-
-  //First Question appears
-
-  //onClick automatically flips to next question, else timeout after a min
