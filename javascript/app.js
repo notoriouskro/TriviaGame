@@ -105,7 +105,7 @@ var game = {
   },
   runClock: function () {
     game.time--;
-    $('.time').text('Time: ' + game.time);
+    $('.time').text('Time Remaining: ' + game.time);
     if (game.time === 0) {
       clearInterval(intervalId);
       game.unAnswer++;
@@ -172,11 +172,13 @@ var game = {
     //clear p
     $('.questionBox').html('');
     //push current info
-    $('.questionBox').html('Correct: ' + this.countCorrect + '<br />');
+    $('.questionBox').html('<h3>Correct: ' + this.countCorrect + '</h3><br />');
     console.log("Correct: " + this.countCorrect);
-    $('.questionBox').append('Incorrect: ' + this.countWrong + '<br />');
+    $('.questionBox').append('<h3>Incorrect: ' + this.countWrong + '</h3><br />');
     console.log("Incorrect: " + this.countWrong);
-    $('.questionBox').append('Unanswered: ' + this.unAnswer + '<br />');
+    $('.questionBox').append('<h3>Unanswered: ' + this.unAnswer + '</h3><br />');
+    $('.buttonDiv').html('<button class="button">Restart!</button>');
+    $(".button").on('click', game.startGame);
   }
 };
 $(".button").on('click', game.startGame);
